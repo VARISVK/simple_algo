@@ -59,4 +59,3 @@ config/local_config.json
 
 # Docker
 .dockerignore
-

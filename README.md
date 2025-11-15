@@ -36,8 +36,8 @@ The Linda Raschke 3-10 Oscillator strategy uses:
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
-cd trading_bot
+git clone https://github.com/VARISVK/simple_algo.git
+cd simple_algo
 ```
 
 2. **Create virtual environment:**
@@ -132,30 +132,15 @@ python main.py --config path/to/config.json
 
 ### Backtesting
 
-```python
-from backtest import run_backtest
-import pandas as pd
+```bash
+# Backtest using Binance public API (no credentials needed)
+python backtest.py
 
-# Load historical data
-ohlcv_data = pd.read_csv('historical_data.csv')
+# Or with options
+python backtest.py --symbol BTC/USDT --timeframe 4h --limit 1000
 
-# Run backtest
-results = run_backtest(
-    ohlcv_data=ohlcv_data,
-    fast_period=3,
-    slow_period=10,
-    signal_period=16,
-    use_trend_filter=True,
-    trend_ema_period=50,
-    initial_balance=10000.0,
-    risk_per_trade=0.02,
-    stop_loss_pct=0.02,
-    take_profit_pct=0.04
-)
-
-print(f"Total P&L: {results['total_pnl_pct']:.2f}%")
-print(f"Win Rate: {results['win_rate']:.2f}%")
-print(f"Max Drawdown: {results['max_drawdown_pct']:.2f}%")
+# Or from CSV file
+python backtest.py --csv data/historical_data.csv
 ```
 
 ## Docker Deployment
@@ -172,56 +157,12 @@ docker-compose logs -f trading-bot
 
 ## AWS Deployment
 
-### EC2 Deployment
-
-1. **Launch EC2 instance:**
-   - Instance type: t3.micro or t3.small
-   - OS: Ubuntu 22.04 LTS
-   - Security group: Allow SSH (port 22)
-
-2. **Install bot:**
-```bash
-ssh -i your-key.pem ubuntu@your-ec2-ip
-git clone <repository-url>
-cd trading_bot
-bash deploy/install.sh
-```
-
-3. **Configure environment:**
-```bash
-nano .env
-# Add your API keys
-```
-
-4. **Start service:**
-```bash
-sudo systemctl start trading-bot
-sudo systemctl enable trading-bot
-```
-
-5. **Monitor logs:**
-```bash
-sudo journalctl -u trading-bot -f
-```
-
-### Using AWS Secrets Manager
-
-Update `config/settings.py` to fetch API keys from AWS Secrets Manager:
-
-```python
-import boto3
-import json
-
-def get_secrets():
-    client = boto3.client('secretsmanager', region_name='us-east-1')
-    response = client.get_secret_value(SecretId='trading-bot-secrets')
-    return json.loads(response['SecretString'])
-```
+See [AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md) for complete AWS deployment guide.
 
 ## Project Structure
 
 ```
-trading_bot/
+simple_algo/
 ├── main.py                 # Entry point
 ├── backtest.py             # Backtesting engine
 ├── data_manager.py         # Data fetching and processing
@@ -239,9 +180,8 @@ trading_bot/
 ├── utils/
 │   ├── logger.py           # Logging configuration
 │   └── database.py         # Trade history storage
-├── deploy/
-│   ├── install.sh          # EC2 installation script
-│   └── cloudwatch_logs.sh  # CloudWatch logging
+├── deploy/                 # AWS deployment scripts
+├── tests/                  # Unit tests
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
@@ -297,4 +237,3 @@ For issues and questions, please open an issue on GitHub.
 ## Disclaimer
 
 This software is for educational purposes only. Trading cryptocurrencies involves substantial risk of loss. The authors and contributors are not responsible for any financial losses incurred from using this software.
-
