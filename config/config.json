@@ -1,0 +1,30 @@
+{
+  "strategy": {
+    "name": "linda_raschke_3_10",
+    "fast_period": 3,
+    "slow_period": 10,
+    "signal_period": 16,
+    "signal_ma_type": "SMA",
+    "use_trend_filter": true,
+    "trend_ema_period": 50
+  },
+  "trading": {
+    "symbol": "BTC/USDT",
+    "timeframe": "1h",
+    "exchange": "binance",
+    "testnet": true
+  },
+  "risk": {
+    "risk_per_trade": 0.02,
+    "stop_loss_pct": 0.02,
+    "take_profit_pct": 0.04,
+    "max_daily_loss": 0.05,
+    "max_position_size": 1000
+  },
+  "execution": {
+    "check_interval": 60,
+    "order_type": "market",
+    "slippage_tolerance": 0.001
+  }
+}
+
